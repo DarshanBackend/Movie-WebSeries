@@ -119,5 +119,3 @@ export const verifyOtp = async (req, res) => {
         return res.status(500).json({ status: false, message: error.message });
     }
 }
-
-// installation and register api created 04-06-2025
