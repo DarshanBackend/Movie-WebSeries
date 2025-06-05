@@ -4,6 +4,12 @@ import express from "express";
 import { connectDB } from "./src/config/db.js";
 import cookieParser from "cookie-parser";
 import userRoutes from "./src/routes/userRoutes.js";
+import aboutUSRoutes from "./src/routes/aboutUsRoutes.js";
+import faqRoutes from "./src/routes/faqRoutes.js";
+import termsConditionRoutes from "./src/routes/termsConditionRoutes.js";
+import privacyPolicyRoutes from "./src/routes/privacyPolicyRoutes.js";
+import cookiePolicyRoutes from "./src/routes/cookiePolicyRoutes.js";
+import contactUsRoutes from "./src/routes/contactUsRoutes.js";
 dotenv.config();
 
 const port = process.env.PORT;
@@ -14,6 +20,24 @@ app.use(express.json());
 
 //User Routes
 app.use("/api/users", userRoutes)
+
+//aboutUs Routes
+app.use("/api/aboutUs", aboutUSRoutes)
+
+//faq Routes
+app.use("/api/faq", faqRoutes)
+
+//termsCondition Routes
+app.use("/api/termsCondition", termsConditionRoutes)
+
+//privacyPolicy Routes
+app.use("/api/privacyPolicy", privacyPolicyRoutes)
+
+//cookiePolicy Routes
+app.use("/api/cookiePolicy", cookiePolicyRoutes)
+
+//contactUs Routes
+app.use("/api/contactUs", contactUsRoutes)
 
 // Connect to Database
 connectDB();
