@@ -1,4 +1,3 @@
-
 import dotenv from "dotenv";
 import express from "express";
 import { connectDB } from "./src/config/db.js";
@@ -10,6 +9,9 @@ import termsConditionRoutes from "./src/routes/termsConditionRoutes.js";
 import privacyPolicyRoutes from "./src/routes/privacyPolicyRoutes.js";
 import cookiePolicyRoutes from "./src/routes/cookiePolicyRoutes.js";
 import contactUsRoutes from "./src/routes/contactUsRoutes.js";
+import movieCategoryRoutes from "./src/routes/movieCategoryRoutes.js";
+import movieRoutes from "./src/routes/movieRoutes.js";
+import starringRoutes from "./src/routes/starringRoutes.js";
 dotenv.config();
 
 const port = process.env.PORT;
@@ -38,6 +40,15 @@ app.use("/api/cookiePolicy", cookiePolicyRoutes)
 
 //contactUs Routes
 app.use("/api/contactUs", contactUsRoutes)
+
+//movieCategory Routes
+app.use("/api/movieCategory", movieCategoryRoutes)
+
+//movie Routes
+app.use("/api/movies", movieRoutes)
+
+//starring Routes
+app.use("/api/starring", starringRoutes)
 
 // Connect to Database
 connectDB();
