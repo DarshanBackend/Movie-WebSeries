@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import jwt  from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs";
 
 const userSchema = mongoose.Schema({
@@ -31,6 +31,13 @@ const userSchema = mongoose.Schema({
     otpExpiry: {
         type: Date
     },
+    planId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Premium"
+    },
+    endDate: {
+        type: Date
+    }
 
 }, { timestamps: true })
 

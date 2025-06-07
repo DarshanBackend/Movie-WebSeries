@@ -6,6 +6,7 @@ import UserServices from "../services/userServices.js";
 import { ThrowError } from "../utils/ErrorUtils.js"
 import fs from "fs"
 import mongoose from 'mongoose';
+import premiumModel from "../models/premiumModel.js";
 
 const userServices = new UserServices()
 
@@ -497,3 +498,4 @@ export const updateCategory = async (req, res) => {
         return ThrowError(res, 500, error.message);
     }
 };
+
