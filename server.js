@@ -12,6 +12,8 @@ import contactUsRoutes from "./src/routes/contactUsRoutes.js";
 import movieCategoryRoutes from "./src/routes/movieCategoryRoutes.js";
 import movieRoutes from "./src/routes/movieRoutes.js";
 import starringRoutes from "./src/routes/starringRoutes.js";
+import premiumRoutes from "./src/routes/premiumRoutes.js";
+import paymentRoutes from "./src/routes/paymentRoutes.js";
 dotenv.config();
 
 const port = process.env.PORT;
@@ -49,6 +51,12 @@ app.use("/api/movies", movieRoutes)
 
 //starring Routes
 app.use("/api/starring", starringRoutes)
+
+//premium Routes
+app.use("/api/premium", premiumRoutes)
+
+//payment Routes
+app.use("/api/payment", paymentRoutes)
 
 // Connect to Database
 connectDB();
