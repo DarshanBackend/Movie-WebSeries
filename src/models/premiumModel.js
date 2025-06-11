@@ -2,33 +2,45 @@ import mongoose from "mongoose";
 
 const PremiumSchema = mongoose.Schema({
     type: {
-        type: String
+        type: String,
+        required: true
     },
     price: {
-        type: Number
+        type: Number,
+        required: true,
+        min: 0
     },
     content: {
-        type: String
+        type: String,
+        required: true
     },
     devices: {
-        type: String
+        type: String,
+        required: true
     },
     cancel_anytime: {
-        type: String
+        type: String,
+        required: true
     },
     ad_free: {
-        type: String
+        type: String,
+        required: true
     },
     family_sharing: {
-        type: String
+        type: String,
+        required: true
     },
     duration: {
         type: String,
         enum: ["Weekly", "Monthly", "Yearly"],
-        require: true
+        required: true
+    },
+    isActive: {
+        type: Boolean,
+        default: true
     }
 }, {
     timestamps: true
-})
+});
 
-export default mongoose.model("Premium", PremiumSchema)
+export default mongoose.model("Premium", PremiumSchema);

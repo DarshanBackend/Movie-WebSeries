@@ -14,12 +14,14 @@ import movieRoutes from "./src/routes/movieRoutes.js";
 import starringRoutes from "./src/routes/starringRoutes.js";
 import premiumRoutes from "./src/routes/premiumRoutes.js";
 import paymentRoutes from "./src/routes/paymentRoutes.js";
+import episoderouter from "./src/routes/episodeRoutes.js";
 dotenv.config();
 
 const port = process.env.PORT;
 const app = express();
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 
 //User Routes
@@ -58,6 +60,9 @@ app.use("/api/premium", premiumRoutes)
 //payment Routes
 app.use("/api/payment", paymentRoutes)
 
+//episode Routes
+app.use("/api/episode", episoderouter)
+
 // Connect to Database
 connectDB();
 
@@ -65,3 +70,5 @@ connectDB();
 app.listen(port, () => {
   console.log(`Server Start At Port http://localhost:${port}`);
 });
+
+

@@ -10,10 +10,28 @@ import {
 
 const movieRoutes = express.Router();
 
-movieRoutes.post('/createMovie', upload.single('thumbnail'), convertJfifToJpeg, createMovie);
+// Handle both thumbnail and video uploads
+movieRoutes.post('/createMovie', 
+    upload.fields([
+        { name: 'thumbnail', maxCount: 1 },
+        { name: 'video', maxCount: 1 }
+    ]), 
+    convertJfifToJpeg, 
+    createMovie
+);
+
 movieRoutes.get('/getAllMovies', getAllMovies);
 movieRoutes.get('/getMovieById/:id', getMovieById);
-movieRoutes.put('/updateMovie/:id', upload.single('thumbnail'), convertJfifToJpeg, updateMovie);
+
+movieRoutes.put('/updateMovie/:id', 
+    upload.fields([
+        { name: 'thumbnail', maxCount: 1 },
+        { name: 'video', maxCount: 1 }
+    ]), 
+    convertJfifToJpeg, 
+    updateMovie
+);
+
 movieRoutes.delete('/deleteMovie/:id', deleteMovie);
 
 export default movieRoutes;
