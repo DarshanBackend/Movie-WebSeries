@@ -29,6 +29,7 @@ export const createPremium = async (req, res) => {
     }
 };
 
+
 // Get all premium plans
 export const getAllPremium = async (req, res) => {
     try {
