@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const PremiumSchema = mongoose.Schema({
     type: {
         type: String,
+        enum: ["Basic", "Standard", "Premium"],
         required: true
     },
     price: {
@@ -15,20 +16,16 @@ const PremiumSchema = mongoose.Schema({
         required: true
     },
     devices: {
-        type: String,
-        required: true
+        type: String
     },
     cancel_anytime: {
-        type: String,
-        required: true
+        type: String
     },
     ad_free: {
-        type: String,
-        required: true
+        type: String
     },
     family_sharing: {
-        type: String,
-        required: true
+        type: String
     },
     duration: {
         type: String,

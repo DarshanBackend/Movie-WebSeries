@@ -129,7 +129,9 @@ export const createMovie = async (req, res) => {
             }
         });
     } catch (error) {
-        // No local file cleanup needed
+        // // No local file cleanup needed
+        // console.log("errror is", error);
+        
         return ThrowError(res, 500, error.message);
     }
 };

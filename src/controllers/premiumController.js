@@ -2,14 +2,24 @@ import Premium from '../models/premiumModel.js';
 import { ThrowError } from '../utils/ErrorUtils.js';
 import mongoose from 'mongoose';
 
-// Create new premium plan
+//  Create new premium plan
 export const createPremium = async (req, res) => {
     try {
-        const { type, price, content, devices, cancel_anytime, ad_free, family_sharing } = req.body;
+        const {
+            type,
+            price,
+            content,
+            devices,
+            cancel_anytime,
+            ad_free,
+            family_sharing,
+            duration,
+            isActive
+        } = req.body;
 
-        // Check if required fields are present
-        if (!type || !price) {
-            return ThrowError(res, 400, "Type and price are required fields");
+        //  Check required fields
+        if (!type || !price || !content || !devices || !cancel_anytime || !ad_free || !family_sharing || !duration) {
+            return ThrowError(res, 400, "All fields are required: type, price, content, devices, cancel_anytime, ad_free, family_sharing, duration");
         }
 
         const newPremium = new Premium({
@@ -19,7 +29,9 @@ export const createPremium = async (req, res) => {
             devices,
             cancel_anytime,
             ad_free,
-            family_sharing
+            family_sharing,
+            duration,
+            isActive: isActive !== undefined ? isActive : true
         });
 
         const savedPremium = await newPremium.save();
@@ -29,8 +41,7 @@ export const createPremium = async (req, res) => {
     }
 };
 
-
-// Get all premium plans
+//  Get all premium plans
 export const getAllPremium = async (req, res) => {
     try {
         const premiums = await Premium.find();
@@ -45,12 +56,11 @@ export const getAllPremium = async (req, res) => {
     }
 };
 
-// Get single premium plan by ID
+//  Get single premium plan by ID
 export const getPremiumById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Validate MongoDB ObjectId
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return ThrowError(res, 400, 'Invalid Premium ID format');
         }
@@ -67,13 +77,11 @@ export const getPremiumById = async (req, res) => {
     }
 };
 
-// Update premium plan
+//  Update premium plan
 export const updatePremium = async (req, res) => {
     try {
         const { id } = req.params;
 
-
-        // Validate MongoDB ObjectId
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return ThrowError(res, 400, 'Invalid Premium ID format');
         }
@@ -86,9 +94,7 @@ export const updatePremium = async (req, res) => {
 
         const updatedPremium = await Premium.findByIdAndUpdate(
             id,
-            {
-                ...req.body
-            },
+            { ...req.body },
             { new: true }
         );
 
@@ -98,25 +104,24 @@ export const updatePremium = async (req, res) => {
     }
 };
 
-// Delete premium plan
+// Delete premium Plan 
 export const deletePremium = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Validate MongoDB ObjectId
         if (!mongoose.Types.ObjectId.isValid(id)) {
-            return ThrowError(res, 400, 'Invalid Premium ID format');
+            return ThrowError(res, 400, 'Invalid Premium ID format')
         }
 
         const premium = await Premium.findById(id);
 
         if (!premium) {
-            return ThrowError(res, 404, 'Premium plan not found');
+            return ThrowError(ResizeObserver, 404, 'Premium Plan not found')
         }
 
         await Premium.findByIdAndDelete(id);
-        res.status(200).json({ message: "Premium plan deleted successfully" });
+        res.status(200).json({ message: "Premium plan deleted successfully" })
     } catch (error) {
-        return ThrowError(res, 500, error.message);
+        return ThrowError(res, 500, error.message)
     }
-};
+}

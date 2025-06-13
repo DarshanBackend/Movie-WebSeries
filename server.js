@@ -15,6 +15,9 @@ import starringRoutes from "./src/routes/starringRoutes.js";
 import premiumRoutes from "./src/routes/premiumRoutes.js";
 import paymentRoutes from "./src/routes/paymentRoutes.js";
 import episoderouter from "./src/routes/episodeRoutes.js";
+import watchlistRouter from "./src/routes/watchlistRoutes.js";
+import {subscribeToPlan}  from "./src/controllers/subscriptionController.js";
+
 dotenv.config();
 
 const port = process.env.PORT;
@@ -63,6 +66,12 @@ app.use("/api/payment", paymentRoutes)
 //episode Routes
 app.use("/api/episode", episoderouter)
 
+// WatchList Routes
+app.use('/api/watchlist', watchlistRouter);
+
+// Subscription Routes
+app.use('/api/subscription', subscribeToPlan );
+
 // Connect to Database
 connectDB();
 
@@ -70,5 +79,3 @@ connectDB();
 app.listen(port, () => {
   console.log(`Server Start At Port http://localhost:${port}`);
 });
-
-
