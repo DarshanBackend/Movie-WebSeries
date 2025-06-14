@@ -99,8 +99,6 @@ export const updatecookiePolicy = async (req, res) => {
     }
 };
 
-
-
 //deletecookiePolicy
 export const deletecookiePolicy = async (req, res) => {
     try {

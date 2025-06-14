@@ -83,7 +83,6 @@ const sendOtpEmail = async (toEmail, otp) => {
         await transporter.sendMail(mailOptions);
 
     } catch (error) {
-        console.log(error);
         throw new Error('Failed to send OTP email');
     }
 }
@@ -123,7 +122,6 @@ export const verifyOtp = async (req, res) => {
             user: userData,
         });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 }
@@ -164,7 +162,10 @@ export const loginUser = async (req, res) => {
         // Set token in cookie
         res.cookie("token", token, {
             httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+            sameSite: 'strict',
             expires: new Date(Date.now() + 8 * 3600000), // 8 hours
+            path: '/' // Ensure cookie is available for all paths
         });
 
         // Send success response
@@ -261,7 +262,6 @@ export const getUserById = async (req, res) => {
             data: user
         });
     } catch (error) {
-        console.error("Error in getUserById:", error);
         return ThrowError(res, 500, error.message);
     }
 };
@@ -328,7 +328,6 @@ export const editProfile = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error in edituser:", error);
         if (req.file?.path && fs.existsSync(req.file.path)) {
             fs.unlinkSync(req.file.path);
         }

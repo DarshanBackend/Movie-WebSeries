@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import { connectDB } from "./src/config/db.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import userRoutes from "./src/routes/userRoutes.js";
 import aboutUSRoutes from "./src/routes/aboutUsRoutes.js";
 import faqRoutes from "./src/routes/faqRoutes.js";
@@ -22,10 +23,19 @@ dotenv.config();
 
 const port = process.env.PORT;
 const app = express();
-app.use(cookieParser());
+
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
+// CORS configuration
+app.use(cors({
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 //User Routes
 app.use("/api/users", userRoutes)

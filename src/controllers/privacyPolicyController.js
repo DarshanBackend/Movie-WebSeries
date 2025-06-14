@@ -99,8 +99,6 @@ export const updateprivacyPolicy = async (req, res) => {
     }
 };
 
-
-
 //deleteprivacyPolicy
 export const deleteprivacyPolicy = async (req, res) => {
     try {

@@ -1,5 +1,4 @@
 import User from '../models/userModel.js';
-import Movie from '../models/movieModel.js';
 import {
     ThrowError
 } from '../utils/ErrorUtils.js';

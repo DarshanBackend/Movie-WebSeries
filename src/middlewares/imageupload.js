@@ -22,28 +22,16 @@ const storage = multerS3({
     bucket: process.env.S3_BUCKET_NAME,
     contentType: multerS3.AUTO_CONTENT_TYPE,
     metadata: function (req, file, cb) {
-        console.log('Processing file metadata:', {
-            fieldname: file.fieldname,
-            originalname: file.originalname,
-            mimetype: file.mimetype
-        });
         cb(null, { fieldname: file.fieldname });
     },
     key: function (req, file, cb) {
         const sanitizedName = file.originalname.replace(/\s+/g, '');
         const finalName = `${Date.now()}-${sanitizedName}`;
-        console.log('Generated file key:', `uploads/${finalName}`);
         cb(null, `uploads/${finalName}`);
     }
 });
 
 const fileFilter = (req, file, cb) => {
-    console.log('File filter processing:', {
-        fieldname: file.fieldname,
-        originalname: file.originalname,
-        mimetype: file.mimetype
-    });
-    
     const ext = path.extname(file.originalname).toLowerCase();
     
     // Image file types
@@ -70,34 +58,16 @@ const fileFilter = (req, file, cb) => {
     // Check if it's an image or video file
     if (file.fieldname === 'thumbnail' || file.fieldname === 'image') {
         if (!allowedImageExts.includes(ext) || !allowedImageMimeTypes.includes(file.mimetype)) {
-            console.log('Invalid image format:', {
-                ext,
-                mimetype: file.mimetype,
-                allowedExts: allowedImageExts,
-                allowedMimeTypes: allowedImageMimeTypes
-            });
             return cb(new Error(`Invalid image format. Allowed formats: ${allowedImageExts.join(', ')}`));
         }
     } else if (file.fieldname === 'video') {
         if (!allowedVideoExts.includes(ext) || !allowedVideoMimeTypes.includes(file.mimetype)) {
-            console.log('Invalid video format:', {
-                ext,
-                mimetype: file.mimetype,
-                allowedExts: allowedVideoExts,
-                allowedMimeTypes: allowedVideoMimeTypes
-            });
             return cb(new Error(`Invalid video format. Allowed formats: ${allowedVideoExts.join(', ')}`));
         }
     } else {
-        console.log('Invalid field name:', file.fieldname);
         return cb(new Error(`Invalid field name: ${file.fieldname}. Expected 'thumbnail', 'image', or 'video'`));
     }
 
-    console.log('File accepted:', {
-        fieldname: file.fieldname,
-        originalname: file.originalname,
-        mimetype: file.mimetype
-    });
     cb(null, true);
 };
 
@@ -111,26 +81,22 @@ const multerInstance = multer({
 const upload = {
     // For single file upload (e.g., profile image)
     single: (fieldName) => {
-        console.log('Setting up single file upload for field:', fieldName);
         return multerInstance.single(fieldName);
     },
     
     // For multiple files with specific fields (e.g., thumbnail and video)
     fields: (fields) => {
-        console.log('Setting up multiple file upload for fields:', fields);
         return multerInstance.fields(fields);
     },
     
     // For multiple files with the same field name
     array: (fieldName, maxCount) => {
-        console.log('Setting up array file upload for field:', fieldName, 'maxCount:', maxCount);
         return multerInstance.array(fieldName, maxCount);
     }
 };
 
 // Error handling middleware
 const handleMulterError = (err, req, res, next) => {
-    console.log('Multer error:', err);
     if (err instanceof multer.MulterError) {
         return res.status(400).json({
             status: false,

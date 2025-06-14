@@ -99,8 +99,6 @@ export const updateTermsCondition = async (req, res) => {
     }
 };
 
-
-
 //deleteTermsCondition
 export const deleteTermsCondition = async (req, res) => {
     try {

@@ -17,8 +17,6 @@ episoderouter.post("/createEpisode",
     ]),
     handleMulterError,
     (req, res, next) => {
-        console.log('Files received:', req.files);
-        console.log('Body received:', req.body);
         next();
     },
     createEpisode

@@ -31,7 +31,6 @@ const deleteFileFromS3 = async (fileUrl) => {
         };
 
         await s3.send(new DeleteObjectCommand(deleteParams));
-        console.log(`Successfully deleted file from S3: ${key}`);
     } catch (error) {
         console.error('Error deleting file from S3:', error);
         throw error;
@@ -41,12 +40,6 @@ const deleteFileFromS3 = async (fileUrl) => {
 // Create a new episode
 export const createEpisode = async (req, res) => {
     try {
-        console.log("Full request:", {
-            body: req.body,
-            files: req.files,
-            file: req.file
-        });
-
         const { movieId, title, description, duration, seasonNo, episodeNo } = req.body;
         
         // Validate required fields
@@ -72,11 +65,6 @@ export const createEpisode = async (req, res) => {
         // Get file URLs from req.files
         const thumbnail = req.files.thumbnail[0].location;
         const video = req.files.video[0].location;
-
-        console.log("File URLs:", {
-            thumbnail,
-            video
-        });
 
         if (!mongoose.Types.ObjectId.isValid(movieId)) {
             return ThrowError(res, 400, "Invalid movie/webseries ID");
@@ -143,7 +131,6 @@ export const createEpisode = async (req, res) => {
             }
         });
     } catch (error) {
-        console.error("Error in createEpisode:", error);
         return ThrowError(res, 500, error.message);
     }
 };
@@ -266,7 +253,6 @@ export const deleteEpisode = async (req, res) => {
             }
         });
     } catch (error) {
-        console.error("Error in deleteEpisode:", error);
         return ThrowError(res, 500, error.message);
     }
 };

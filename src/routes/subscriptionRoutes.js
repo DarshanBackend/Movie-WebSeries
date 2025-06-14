@@ -1,9 +1,8 @@
 import express from 'express';
-import { subscribeToPlan } from '../controllers/subscriptionController';
+import { subscribeToPlan } from '../controllers/subscriptionController.js';
 
-const router = express.Router();
+const subscribeRouter = express.Router();
 
-// Correct route definition
-router.post('/subscribe', subscribeToPlan);
+subscribeRouter.post('/subscribe', subscribeToPlan);
 
-export default router;
+export default subscribeRouter;

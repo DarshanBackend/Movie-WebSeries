@@ -37,14 +37,12 @@ const userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Movie"
     }],
-    devices: [
-  {
-    type: String,     // e.g., "mobile", "desktop", "tablet"
-    os: String,       // e.g., "Windows", "Android"
-    browser: String,  // e.g., "Chrome"
-    loggedInAt: Date
-  }
-],
+    devices: [{
+        deviceType: String,     // e.g., "mobile", "desktop", "tablet"
+        os: String,       // e.g., "Windows", "Android"
+        browser: String,  // e.g., "Chrome"
+        loggedInAt: Date
+    }],
     planStatus: {
         type: String,
         enum: ["Active", "Expired", "No Subscription"],
@@ -56,7 +54,7 @@ const userSchema = mongoose.Schema({
 userSchema.methods.getJWT = async function () {
     const user = this;
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "1h"
+        expiresIn: "8h"  // Match the cookie expiration time
     });
     return token;
 };
