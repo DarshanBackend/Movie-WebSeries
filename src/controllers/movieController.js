@@ -864,24 +864,20 @@ export const incrementMovieViews = async (req, res) => {
             return ThrowError(res, 404, 'Movie not found');
         }
 
-        // Ensure views is an array and filter out any invalid entries (e.g., numbers from old data)
+        // Ensure views is an array and filter out any invalid entries
         if (!Array.isArray(movie.views)) {
             movie.views = [];
         } else {
             movie.views = movie.views.filter(view => typeof view === 'object' && view !== null && view.userId && view.timestamp);
         }
 
-        // Check if user has viewed this movie in the last 24 hours
-        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-        const hasRecentView = movie.views.some(view => {
-            return view.userId.toString() === userId.toString() && 
-                   new Date(view.timestamp) > twentyFourHoursAgo;
-        });
+        // Check if user has ever viewed this movie
+        const hasViewed = movie.views.some(view => view.userId.toString() === userId.toString());
 
-        if (hasRecentView) {
+        if (hasViewed) {
             return res.status(200).json({
                 status: true,
-                message: "View already counted in last 24 hours",
+                message: "User has already viewed this movie",
                 data: {
                     movieId: movie._id,
                     title: movie.title,
@@ -909,6 +905,53 @@ export const incrementMovieViews = async (req, res) => {
         });
     } catch (error) {
         console.error('Error in incrementMovieViews:', error);
+        return ThrowError(res, 500, error.message);
+    }
+};
+
+// Get Popular Movies by Category
+export const getPopularMoviesByCategory = async (req, res) => {
+    try {
+        // Get all categories
+        const categories = await MovieCategory.find();
+        
+        if (!categories || categories.length === 0) {
+            return res.status(200).json({
+                status: true,
+                message: "No categories found",
+                data: {}
+            });
+        }
+
+        // Get popular movies for each category
+        const popularMoviesByCategory = {};
+        
+        for (const category of categories) {
+            const popularMovies = await Movie.find({ category: category._id })
+                .sort({ rating: -1, views: -1 })
+                .limit(10)
+                .populate('category');
+
+            if (popularMovies && popularMovies.length > 0) {
+                popularMoviesByCategory[category.categoryName] = popularMovies.map(movie => ({
+                    _id: movie._id,
+                    title: movie.title,
+                    thumbnail: movie.thumbnail,
+                    description: movie.description,
+                    type: movie.type,
+                    views: movie.views.length,
+                    rating: movie.rating,
+                    category: movie.category
+                }));
+            }
+        }
+
+        return res.status(200).json({
+            status: true,
+            message: "Popular movies by category fetched successfully",
+            data: popularMoviesByCategory
+        });
+    } catch (error) {
         return ThrowError(res, 500, error.message);
     }
 };

@@ -18,7 +18,8 @@ import {
     updateMovieRating,
     deleteMovieRating,
     incrementMovieViews,
-    getWatchAgainMovies
+    getWatchAgainMovies,
+    getPopularMoviesByCategory
 } from '../controllers/movieController.js';
 import { userAuth } from '../middlewares/auth.js';
 import { upload } from '../middlewares/imageupload.js';
@@ -61,5 +62,8 @@ movieRoutes.get('/getMovieRatingDetails/:movieId', getMovieRatingDetails);
 movieRoutes.get('/getTopRatedMovie', getTopRatedMovies);
 movieRoutes.post('/incrementViews/:movieId', userAuth, incrementMovieViews);
 movieRoutes.get('/getWatchAgainMovies', userAuth, getWatchAgainMovies);
+
+// Get popular movies by category
+movieRoutes.get('/getPopularMoviesByCategory', getPopularMoviesByCategory);
 
 export default movieRoutes;

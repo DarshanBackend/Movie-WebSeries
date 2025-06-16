@@ -150,7 +150,21 @@ export const getAllEpisodes = async (req, res) => {
         if (!episodes || episodes.length === 0) {
             return ThrowError(res, 404, 'No episodes found');
         }
-        res.status(200).json(episodes);
+
+        const getBySeason = episodes.reduce((acc, episode) => {
+            const season = episode.seasonNo;
+            if (!acc[season]) {
+                acc[season] = [];
+            }
+            acc[season].push(episode);
+            return acc;
+        }, {});
+
+        res.status(200).json({
+            status: true,
+            message: "Episodes fetched successfully",
+            data: getBySeason
+        });
     } catch (error) {
         return ThrowError(res, 500, error.message);
     }
