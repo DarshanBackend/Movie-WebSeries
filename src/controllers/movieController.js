@@ -955,3 +955,21 @@ export const getPopularMoviesByCategory = async (req, res) => {
         return ThrowError(res, 500, error.message);
     }
 };
+
+// Get Top 5 Most Recently Added Movies or Webseries
+export const getLatestFiveContent = async (req, res) => {
+    try {
+        const latestContent = await Movie.find()
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .populate('category');
+
+        return res.status(200).json({
+            status: true,
+            message: "Top 5 most recently added movies or webseries fetched successfully",
+            data: latestContent
+        });
+    } catch (error) {
+        return ThrowError(res, 500, error.message);
+    }
+};
