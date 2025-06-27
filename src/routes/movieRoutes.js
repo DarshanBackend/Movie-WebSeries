@@ -30,7 +30,8 @@ const movieRoutes = express.Router();
 // Create movie with file upload
 movieRoutes.post('/createMovie', userAuth, upload.fields([
     { name: 'thumbnail', maxCount: 1 },
-    { name: 'video', maxCount: 1 }
+    { name: 'video', maxCount: 1 },
+    { name: 'bg_image', maxCount: 1 }
 ]), createMovie);
 
 // Get all movies
@@ -42,7 +43,8 @@ movieRoutes.get('/getMovieById/:id', getMovieById);
 // Update movie
 movieRoutes.put('/updateMovie/:id', userAuth, upload.fields([
     { name: 'thumbnail', maxCount: 1 },
-    { name: 'video', maxCount: 1 }
+    { name: 'video', maxCount: 1 },
+    { name: 'bg_image', maxCount: 1 }
 ]), updateMovie);
 
 // Delete movie

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const movieSchema = new mongoose.Schema({
     title: { type: String, required: true },
     thumbnail: { type: String },
+    bg_image: { type: String },
     video: { type: String },
     releaseYear: { type: Number },
     duration: { type: Number },
@@ -29,11 +30,11 @@ const movieSchema = new mongoose.Schema({
     }]
 }, { timestamps: true });
 
-movieSchema.virtual('formattedDuration').get(function() {
+movieSchema.virtual('formattedDuration').get(function () {
     if (typeof this.duration !== 'number' || this.duration < 0) {
         return null; // Or handle as appropriate
     }
-    const totalMinutes = Math.floor(this.duration / 60000); 
+    const totalMinutes = Math.floor(this.duration / 60000);
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
 
@@ -45,7 +46,7 @@ movieSchema.virtual('formattedDuration').get(function() {
 });
 
 // Add a pre-save middleware to handle the views field
-movieSchema.pre('save', function(next) {
+movieSchema.pre('save', function (next) {
     // If views is a number, convert it to the new format
     if (typeof this.views === 'number') {
         this.views = [];

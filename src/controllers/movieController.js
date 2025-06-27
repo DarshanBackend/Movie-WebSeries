@@ -76,6 +76,7 @@ export const createMovie = async (req, res) => {
         // Handle file uploads
         let thumbnail = undefined;
         let video = undefined;
+        let bg_image = undefined;
 
         if (req.files) {
             if (req.files.thumbnail && req.files.thumbnail[0]) {
@@ -83,6 +84,9 @@ export const createMovie = async (req, res) => {
             }
             if (req.files.video && req.files.video[0]) {
                 video = req.files.video[0].location; // Use .location for S3 URL
+            }
+            if (req.files.bg_image && req.files.bg_image[0]) {
+                bg_image = req.files.bg_image[0].location;
             }
         }
 
@@ -96,6 +100,7 @@ export const createMovie = async (req, res) => {
         const movie = new Movie({
             title,
             thumbnail,
+            bg_image,
             video,
             releaseYear: parsedReleaseYear,
             duration: parsedDuration,
@@ -120,6 +125,10 @@ export const createMovie = async (req, res) => {
                     thumbnail: req.files.thumbnail ? {
                         url: req.files.thumbnail[0].location,
                         type: req.files.thumbnail[0].mimetype
+                    } : null,
+                    bg_image: req.files.bg_image ? {
+                        url: req.files.bg_image[0].location,
+                        type: req.files.bg_image[0].mimetype
                     } : null,
                     video: req.files.video ? {
                         url: req.files.video[0].location,
@@ -223,6 +232,16 @@ export const updateMovie = async (req, res) => {
             movie.thumbnail = req.files.thumbnail[0].location;
         }
 
+        // Handle new bg_image upload
+        if (req.files && req.files.bg_image && req.files.bg_image[0]) {
+            // Delete old bg_image from S3 if it exists
+            if (movie.bg_image) {
+                await deleteFromS3(movie.bg_image);
+            }
+            // Set new bg_image from S3 URL
+            movie.bg_image = req.files.bg_image[0].location;
+        }
+
         // Handle new video upload
         if (req.files && req.files.video && req.files.video[0]) {
             // Delete old video from S3 if it exists
@@ -257,6 +276,10 @@ export const updateMovie = async (req, res) => {
                     thumbnail: req.files.thumbnail ? {
                         url: req.files.thumbnail[0].location,
                         type: req.files.thumbnail[0].mimetype
+                    } : null,
+                    bg_image: req.files.bg_image ? {
+                        url: req.files.bg_image[0].location,
+                        type: req.files.bg_image[0].mimetype
                     } : null,
                     video: req.files.video ? {
                         url: req.files.video[0].location,

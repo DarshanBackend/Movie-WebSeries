@@ -56,7 +56,13 @@ const fileFilter = (req, file, cb) => {
     ];
 
     // Check if it's an image or video file
-    if (file.fieldname === 'thumbnail' || file.fieldname === 'image' || file.fieldname === 'starring_image' || file.fieldname === 'category_image') {
+    if (
+        file.fieldname === 'thumbnail' ||
+        file.fieldname === 'image' ||
+        file.fieldname === 'starring_image' ||
+        file.fieldname === 'category_image' ||
+        file.fieldname === 'bg_image'
+    ) {
         if (!allowedImageExts.includes(ext) || !allowedImageMimeTypes.includes(file.mimetype)) {
             return cb(new Error(`Invalid image format. Allowed formats: ${allowedImageExts.join(', ')}`));
         }
@@ -65,7 +71,7 @@ const fileFilter = (req, file, cb) => {
             return cb(new Error(`Invalid video format. Allowed formats: ${allowedVideoExts.join(', ')}`));
         }
     } else {
-        return cb(new Error(`Invalid field name: ${file.fieldname}. Expected 'thumbnail', 'image', 'starring_image', 'category_image', or 'video'`));
+        return cb(new Error(`Invalid field name: ${file.fieldname}. Expected 'thumbnail', 'image', 'starring_image', 'category_image', 'bg_image', or 'video'`));
     }
 
     cb(null, true);
