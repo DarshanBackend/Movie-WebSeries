@@ -55,9 +55,12 @@ export const createMovie = async (req, res) => {
 
         let parsedDuration = undefined;
         if (duration) {
+            // If duration is less than 1000, assume it's in minutes and convert to ms
             parsedDuration = parseInt(duration);
+            if (parsedDuration < 1000) {
+                parsedDuration = parsedDuration * 60000;
+            }
             if (isNaN(parsedDuration)) {
-                // No local file cleanup needed
                 return ThrowError(res, 400, 'Invalid duration. Must be a number.');
             }
         }
@@ -116,11 +119,15 @@ export const createMovie = async (req, res) => {
 
         const savedMovie = await movie.save();
 
+        const movieObj = savedMovie.toObject({ virtuals: true });
+        movieObj.duration = movieObj.formattedDuration;
+        delete movieObj.formattedDuration;
+
         return res.status(201).json({
             status: true,
             message: "Movie created successfully",
             data: {
-                movie: savedMovie,
+                movie: movieObj,
                 fileInfo: req.files ? {
                     thumbnail: req.files.thumbnail ? {
                         url: req.files.thumbnail[0].location,
@@ -267,11 +274,15 @@ export const updateMovie = async (req, res) => {
 
         await movie.save();
 
+        const movieObj = movie.toObject({ virtuals: true });
+        movieObj.duration = movieObj.formattedDuration;
+        delete movieObj.formattedDuration;
+
         return res.status(200).json({
             status: true,
             message: "Movie updated successfully",
             data: {
-                movie,
+                movie: movieObj,
                 fileInfo: req.files ? {
                     thumbnail: req.files.thumbnail ? {
                         url: req.files.thumbnail[0].location,

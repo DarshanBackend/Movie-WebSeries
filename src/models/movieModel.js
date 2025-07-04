@@ -34,7 +34,7 @@ movieSchema.virtual('formattedDuration').get(function () {
     if (typeof this.duration !== 'number' || this.duration < 0) {
         return null; // Or handle as appropriate
     }
-    const totalMinutes = Math.floor(this.duration / 60000);
+    const totalMinutes = Math.floor(this.duration / 600);
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
 
